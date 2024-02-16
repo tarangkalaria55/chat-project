@@ -1,0 +1,19 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    },
+    "hide-files.files": [],
+    "editor.stickyScroll.enabled": true,
+    "editor.stickyScroll.defaultModel": "foldingProviderModel",
+    "css.customData": [
+        "./.vscode/css_custom_data.json"
+    ],
+    "[html]": {
+        "editor.stickyScroll.enabled": false,
+    }
+}

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "chat-api"
+		},
+		{
+			"path": "chat-client"
+		}
+	],
+	"settings": {
+		"hide-files.files": []
+	}
+}
