@@ -9,6 +9,7 @@ import { jwtConstants } from './constants';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalStrategy } from './local.strategy';
 import { WsAuthStrategy } from './ws-auth.strategy';
+import { TokenService } from './token.service';
 
 @Module({
   imports: [
@@ -25,10 +26,11 @@ import { WsAuthStrategy } from './ws-auth.strategy';
       useClass: JwtAuthGuard,
     },
     AuthService,
+    TokenService,
     LocalStrategy,
     JwtStrategy,
     WsAuthStrategy,
   ],
-  exports: [AuthService, PassportModule, JwtModule, JwtStrategy],
+  exports: [AuthService, TokenService],
 })
 export class AuthModule {}
