@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -11,9 +11,10 @@ import {
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
+import { TokenService } from 'src/auth/token.service';
 import { WsAuthGuard } from 'src/auth/ws-auth.guard';
 import { WsCurrentUser } from 'src/decorators/ws-current-user.decorator';
-import { UserEntity } from 'src/users/users';
+import { UserEntity } from 'src/users/users.entity';
 
 @UseGuards(WsAuthGuard)
 @WebSocketGateway({
@@ -24,19 +25,50 @@ import { UserEntity } from 'src/users/users';
 export class WebsocketGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private tokenService: TokenService) {}
+
   @WebSocketServer()
   server: Server;
 
-  handleConnection(client: Socket, @WsCurrentUser() user: UserEntity) {
-    //console.log(client, user);
+  async handleConnection(socket: Socket) {
+    try {
+      const tokenquery = socket?.handshake?.query?.token || '';
+      let token = '';
+      if (tokenquery) {
+        if (Array.isArray(tokenquery)) {
+          token = tokenquery.length > 0 ? tokenquery[0] || '' : '';
+        } else {
+          token = tokenquery || '';
+        }
+      }
+
+      const user = await this.tokenService.getUserFromToken(
+        (token || '').trim(),
+      );
+
+      if (!user) {
+        return this.disconnect(socket);
+      }
+      socket.handshake['user'] = user;
+
+      const socketID = socket.id;
+    } catch {
+      return this.disconnect(socket);
+    }
   }
-  handleDisconnect(client: Socket) {
-    //console.log(client);
+
+  handleDisconnect(socket: Socket) {
+    socket.disconnect();
+  }
+
+  private disconnect(socket: Socket) {
+    socket.emit('Error', new UnauthorizedException());
+    socket.disconnect();
   }
 
   @SubscribeMessage('message')
   handleMessage(
-    client: Socket,
+    socket: Socket,
     payload: any,
     @WsCurrentUser() user: UserEntity,
   ): string {

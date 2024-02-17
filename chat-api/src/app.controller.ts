@@ -12,7 +12,7 @@ import { LocalAuthGuard } from './auth/local-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { UserEntity } from './users/users';
+import { UserEntity } from './users/users.entity';
 
 @ApiBearerAuth()
 @Controller()

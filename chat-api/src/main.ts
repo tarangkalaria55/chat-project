@@ -2,7 +2,6 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { AuthenticatedWsIoAdapter } from './websocket/authenticated-ws-io.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,7 +10,6 @@ async function bootstrap() {
   app.enableCors({ origin: '*' });
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useWebSocketAdapter(new AuthenticatedWsIoAdapter(app));
 
   const config = new DocumentBuilder()
     .setTitle('Cats example')
