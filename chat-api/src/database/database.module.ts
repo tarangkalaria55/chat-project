@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities';
+import { UserEntity } from './entities';
 import { DatabaseService } from './database.service';
 
 @Module({
@@ -16,7 +16,7 @@ import { DatabaseService } from './database.service';
       // entities: [User],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [DatabaseService],
   exports: [TypeOrmModule, DatabaseService],

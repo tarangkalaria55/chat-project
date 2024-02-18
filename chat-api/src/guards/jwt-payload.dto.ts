@@ -1,6 +1,6 @@
-import { User } from '../database';
+import { UserEntity } from '../database';
 
 export interface JwtPayloadDto {
   sub: string | number;
-  user: User;
+  user: UserEntity;
 }
