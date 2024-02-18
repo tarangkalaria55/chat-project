@@ -14,7 +14,7 @@ export class AuthService {
     username: string,
     pass: string,
   ): Promise<UserEntity | null> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findByUsername(username);
     if (user && user.password === pass) {
       const result = new UserEntity(user);
       return result;
@@ -25,7 +25,7 @@ export class AuthService {
     userId: number,
     username: string,
   ): Promise<UserEntity | null> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findByUsername(username);
     if (user && user.userId === userId) {
       const result = new UserEntity(user);
       return result;

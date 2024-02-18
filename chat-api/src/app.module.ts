@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { UserEntity } from './users/users.entity';
+import { SocketsModule } from './sockets/sockets.module';
+import { SocketEntity } from './sockets/sockets.entity';
 
 @Module({
   imports: [
@@ -15,12 +17,13 @@ import { UserEntity } from './users/users.entity';
       username: 'sa',
       password: 'm00ns00n',
       database: 'chatdb',
-      entities: [UserEntity],
+      entities: [UserEntity, SocketEntity],
       synchronize: true,
     }),
     AuthModule,
     UsersModule,
     WebsocketModule,
+    SocketsModule,
   ],
   controllers: [AppController],
   providers: [],

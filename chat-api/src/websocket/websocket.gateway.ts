@@ -14,6 +14,7 @@ import { Server, Socket } from 'socket.io';
 import { TokenService } from 'src/auth/token.service';
 import { WsAuthGuard } from 'src/auth/ws-auth.guard';
 import { WsCurrentUser } from 'src/decorators/ws-current-user.decorator';
+import { SocketsService } from 'src/sockets/sockets.service';
 import { UserEntity } from 'src/users/users.entity';
 
 @UseGuards(WsAuthGuard)
@@ -25,7 +26,10 @@ import { UserEntity } from 'src/users/users.entity';
 export class WebsocketGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private tokenService: TokenService) {}
+  constructor(
+    private tokenService: TokenService,
+    private socketService: SocketsService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -47,21 +51,24 @@ export class WebsocketGateway
       );
 
       if (!user) {
-        return this.disconnect(socket);
+        return await this.disconnect(socket);
       }
       socket.handshake['user'] = user;
 
+      const userId = user.userId;
       const socketID = socket.id;
+      await this.socketService.createSocket(userId, socketID);
     } catch {
-      return this.disconnect(socket);
+      return await this.disconnect(socket);
     }
   }
 
-  handleDisconnect(socket: Socket) {
-    socket.disconnect();
+  async handleDisconnect(socket: Socket) {
+    await this.disconnect(socket);
   }
 
-  private disconnect(socket: Socket) {
+  private async disconnect(socket: Socket) {
+    await this.socketService.deleteSocketBySocketId(socket.id);
     socket.emit('Error', new UnauthorizedException());
     socket.disconnect();
   }

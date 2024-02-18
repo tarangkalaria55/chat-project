@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { SocketEntity } from 'src/sockets/sockets.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export interface IUser {
   userId: number;
@@ -20,6 +21,10 @@ export class UserEntity implements IUserEntity {
   @Exclude()
   @Column()
   password: string;
+
+  @Exclude()
+  @OneToMany(() => SocketEntity, (socket) => socket.user)
+  sockets: SocketEntity[];
 
   constructor(partial: Partial<IUserEntity>) {
     Object.assign(this, partial);
