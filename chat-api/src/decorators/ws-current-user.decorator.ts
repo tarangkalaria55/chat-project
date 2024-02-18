@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Socket } from 'socket.io';
-import { UserEntity } from '../users/users.entity';
+import { UserEntity } from '../users/entities/users.entity';
 
 export const WsCurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext): UserEntity | null => {

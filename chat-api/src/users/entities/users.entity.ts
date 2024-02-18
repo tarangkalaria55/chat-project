@@ -1,9 +1,9 @@
 import { Exclude } from 'class-transformer';
-import { SocketEntity } from 'src/sockets/sockets.entity';
+import { SocketEntity } from 'src/sockets/entities/sockets.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export interface IUser {
-  userId: number;
+  id: number;
   username: string;
   password: string;
 }
@@ -13,7 +13,7 @@ export interface IUserEntity extends IUser {}
 @Entity('users')
 export class UserEntity implements IUserEntity {
   @PrimaryGeneratedColumn()
-  userId: number;
+  id: number;
 
   @Column()
   username: string;

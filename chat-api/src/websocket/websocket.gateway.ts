@@ -15,7 +15,7 @@ import { TokenService } from 'src/auth/token.service';
 import { WsAuthGuard } from 'src/auth/ws-auth.guard';
 import { WsCurrentUser } from 'src/decorators/ws-current-user.decorator';
 import { SocketsService } from 'src/sockets/sockets.service';
-import { UserEntity } from 'src/users/users.entity';
+import { UserEntity } from 'src/users/entities/users.entity';
 
 @UseGuards(WsAuthGuard)
 @WebSocketGateway({

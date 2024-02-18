@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 import { jwtConstants, wsQueryParam } from './constants';
 import { AuthService } from './auth.service';
-import { UserEntity } from 'src/users/users.entity';
+import { UserEntity } from 'src/users/entities/users.entity';
 
 @Injectable()
 export class WsAuthStrategy extends PassportStrategy(Strategy, 'ws') {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from './users.entity';
+import { UserEntity } from './entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 

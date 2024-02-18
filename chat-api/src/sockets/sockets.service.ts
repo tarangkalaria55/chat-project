@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SocketEntity } from './sockets.entity';
+import { SocketEntity } from './entities/sockets.entity';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -13,13 +13,13 @@ export class SocketsService {
   ) {}
 
   findByUserId(userId: number) {
-    return this.repo.find({ where: { user: { userId } } });
+    return this.repo.find({ where: { user: { id: userId } } });
   }
   findBySocketId(socketId: string) {
     return this.repo.findOne({ where: { socketId } });
   }
   async createSocket(userId: number, socketId: string) {
-    const user = await this.userService.findOne({ where: { userId } });
+    const user = await this.userService.findOne({ where: { id: userId } });
     const socket = new SocketEntity();
     socket.socketId = socketId;
     socket.user = user;
@@ -31,7 +31,7 @@ export class SocketsService {
     await this.repo.remove(sockets);
   }
   async deleteSocketByUserId(userId: number) {
-    const sockets = await this.repo.find({ where: { user: { userId } } });
+    const sockets = await this.repo.find({ where: { user: { id: userId } } });
     await this.repo.remove(sockets);
   }
 }
