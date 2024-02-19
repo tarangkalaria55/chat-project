@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database';
-import { LoginDto } from '../dto';
-import { TokenService } from './token.service';
+import { DatabaseService } from '../../database';
+import { LoginDto } from '../../dto';
+import { TokenService } from '../helper/token.service';
 
 @Injectable()
 export class AuthService {

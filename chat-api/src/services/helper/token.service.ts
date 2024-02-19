@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserEntity } from '../database';
-import { JwtPayloadDto } from '../guards';
-import { ConfigService } from '@nestjs/config';
+import { UserEntity } from '../../database';
+import { JwtPayloadDto } from '../../guards';
+import { ConfigService } from '../../config';
 
 @Injectable()
 export class TokenService {
@@ -13,10 +13,7 @@ export class TokenService {
 
   async tokenToUser(token: string) {
     const decode = await this.jwtService.verifyAsync<JwtPayloadDto>(token, {
-      secret: this.config.getOrThrow<string>(
-        'JWT_SECRET',
-        'SECRET_SECRET_SECRET_SECRET_SECRET_SECRET',
-      ),
+      secret: this.config.JWT_SECRET,
     });
     if (decode && decode.user) {
       return decode.user;
@@ -31,10 +28,7 @@ export class TokenService {
       user: user,
     };
     return this.jwtService.signAsync(payload, {
-      secret: this.config.getOrThrow<string>(
-        'JWT_SECRET',
-        'SECRET_SECRET_SECRET_SECRET_SECRET_SECRET',
-      ),
+      secret: this.config.JWT_SECRET,
     });
   }
 }

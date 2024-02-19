@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SocketEntity, UserEntity } from './entities';
+import { ConfigModule, ConfigService } from '../config';
 import { DatabaseService } from './database.service';
 
 @Module({
@@ -11,11 +11,11 @@ import { DatabaseService } from './database.service';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
-        host: config.getOrThrow<string>('DB_HOST', 'localhost'),
-        port: config.getOrThrow<number>('DB_PORT', 3306),
-        username: config.getOrThrow<string>('DB_USER', 'root'),
-        password: config.getOrThrow<string>('DB_PASSWORD', ''),
-        database: config.getOrThrow<string>('DB_DATABASE', 'chatdb'),
+        host: config.DB_HOST,
+        port: config.DB_PORT,
+        username: config.DB_USER,
+        password: config.DB_PASSWORD,
+        database: config.DB_DATABASE,
         autoLoadEntities: true,
         // entities: [User],
         synchronize: true,
