@@ -1,24 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from './entities';
-import { SocketEntity } from './entities/socket.entity';
+import {
+  ConnectedUserEntity,
+  JoinedRoomEntity,
+  MessageEntity,
+  RoomEntity,
+  UserEntity,
+} from './entities';
 
 @Injectable()
 export class DatabaseService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>,
+    private userRepo: Repository<UserEntity>,
 
-    @InjectRepository(SocketEntity)
-    private socketsRepository: Repository<SocketEntity>,
+    @InjectRepository(ConnectedUserEntity)
+    private connectedUserRepo: Repository<ConnectedUserEntity>,
+
+    @InjectRepository(JoinedRoomEntity)
+    private joinedRoomRepo: Repository<JoinedRoomEntity>,
+
+    @InjectRepository(MessageEntity)
+    private messageRepo: Repository<MessageEntity>,
+
+    @InjectRepository(RoomEntity)
+    private roomRepo: Repository<RoomEntity>,
   ) {}
 
   get user() {
-    return this.usersRepository;
+    return this.userRepo;
   }
 
-  get socket() {
-    return this.socketsRepository;
+  get conn_user() {
+    return this.connectedUserRepo;
+  }
+
+  get joined_room() {
+    return this.joinedRoomRepo;
+  }
+
+  get message() {
+    return this.messageRepo;
+  }
+
+  get room() {
+    return this.roomRepo;
   }
 }

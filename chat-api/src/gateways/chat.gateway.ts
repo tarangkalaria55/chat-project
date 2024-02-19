@@ -12,7 +12,7 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Server, Socket } from 'socket.io';
 import { WsAuthGuard } from '../guards';
-import { TokenService } from 'src/services';
+import { ConnectedUserService, TokenService } from '../services';
 
 @UseGuards(WsAuthGuard)
 @WebSocketGateway({
@@ -21,12 +21,15 @@ import { TokenService } from 'src/services';
   },
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private tokenService: TokenService) {}
+  constructor(
+    private tokenService: TokenService,
+    private connUserService: ConnectedUserService,
+  ) {}
 
   @WebSocketServer()
   server: Server;
 
-  async handleConnection(socket: Socket, ...args: any[]) {
+  async handleConnection(socket: Socket) {
     try {
       const query_token = socket.handshake.query['token'];
       let token = '';
@@ -42,6 +45,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.disconnect(socket);
       }
       socket.handshake['user'] = user;
+      await this.connUserService.addConnectedSocket(user.id, socket.id);
     } catch (error) {
       this.disconnect(socket);
     }
@@ -52,6 +56,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private async disconnect(socket: Socket) {
+    await this.connUserService.removeConnectedSocket(socket.id);
     socket.emit('Error', new UnauthorizedException());
     socket.disconnect();
   }

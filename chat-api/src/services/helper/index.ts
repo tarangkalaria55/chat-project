@@ -1,2 +1,2 @@
-export * from './socket.service';
+export * from './connected-user.service';
 export * from './token.service';

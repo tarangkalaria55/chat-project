@@ -1,5 +1,10 @@
-import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { DatabaseModule } from './database';
@@ -9,10 +14,11 @@ import { ChatGateway } from './gateways';
 import {
   AppService,
   AuthService,
-  SocketService,
+  ConnectedUserService,
   TokenService,
 } from './services';
 import { ConfigModule, ConfigService } from './config';
+import { RequestLoggerMiddleware } from './middlewares';
 
 @Module({
   imports: [
@@ -33,6 +39,10 @@ import { ConfigModule, ConfigService } from './config';
   controllers: [AppController, AuthController],
   providers: [
     {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
@@ -42,7 +52,12 @@ import { ConfigModule, ConfigService } from './config';
     AppService,
     AuthService,
     TokenService,
-    SocketService,
+    ConnectedUserService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  // let's add a middleware on all routes
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+  }
+}

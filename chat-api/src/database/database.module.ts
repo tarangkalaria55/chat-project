@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SocketEntity, UserEntity } from './entities';
+import { entities } from './entities';
 import { ConfigModule, ConfigService } from '../config';
 import { DatabaseService } from './database.service';
 
@@ -21,7 +21,7 @@ import { DatabaseService } from './database.service';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([UserEntity, SocketEntity]),
+    TypeOrmModule.forFeature([...entities]),
   ],
   providers: [DatabaseService],
   exports: [TypeOrmModule, DatabaseService],
