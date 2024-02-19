@@ -8,7 +8,7 @@ import { ConfigService } from '../config';
 export class WsStrategy extends PassportStrategy(Strategy, 'ws') {
   constructor(private config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
       ignoreExpiration: false,
       secretOrKey: config.JWT_SECRET,
     });
