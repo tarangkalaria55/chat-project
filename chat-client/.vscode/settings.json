@@ -8,8 +8,10 @@
         "**/Thumbs.db": true
     },
     "hide-files.files": [],
+    "editor.formatOnSave": true,
     "editor.stickyScroll.enabled": true,
     "editor.stickyScroll.defaultModel": "foldingProviderModel",
+    "git.openRepositoryInParentFolders": "always",
     "css.customData": [
         "./.vscode/css_custom_data.json"
     ],
